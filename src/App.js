@@ -2,6 +2,7 @@ import React from 'react';
 
 import './global.css';
 import './App.css';
+import './Sidebar.css';
 
 function App() {
   return (
@@ -35,7 +36,6 @@ function App() {
         </form>
       </aside>
       <main>
-
       </main>
     </div>
 
