@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import './styles.css';
 
-function DevForm({ onSubmit }) {
+function DevForm({ onSub }) {
    const [github_username, setGithubUsername] = useState('');
    const [techs, setTechs] = useState('');
    const [latitude, setLatitude] = useState('');
@@ -10,21 +10,34 @@ function DevForm({ onSubmit }) {
 
    useEffect(()=>{
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
+         (position) => {
+            const { latitude, longitude } = position.coords;
   
-          setLatitude(latitude);
-          setLongitude(longitude);
-        },
-        (err) => { console.log(err) },
-        {timeout: 30000, }
+            setLatitude(latitude);
+            setLongitude(longitude);
+         },
+         (err) => { console.log(err) },
+         {timeout: 30000, }
       );
    },[]);
 
+   async function handleSubmit(e) {
+      e.preventDefault();
 
+
+      await onSub({ //funcao pai handleAddDev
+         github_username,
+         techs,
+         latitude,
+         longitude,
+      });
+
+      setGithubUsername('');
+      setTechs('');
+   }
 
    return(
-      <form onSubmit={handleAddDev} >
+      <form onSubmit={handleSubmit} >
          <div className="input-block">
          <label htmlFor="github_username">Usuário do Github</label>
          <input name="github_username" id="github_username" required

@@ -21,18 +21,8 @@ function App() {
     loadDevs();
   },[])
 
-  async function handleAddDev(e) {
-    e.preventDefault();
-
-    const response = await api.post('/devs', {
-      github_username,
-      techs,
-      latitude,
-      longitude,
-    })
-
-    setGithubUsername('');
-    setTechs('');
+  async function handleAddDev(data) {
+    const response = await api.post('/devs', data)
 
     setDevs([...devs, response.data]);
   }
@@ -41,7 +31,7 @@ function App() {
     <div id="app">
       <aside>
         <strong>Cadastrar</strong>
-        <DevForm onSubmit={handleAddDev} />
+        <DevForm onSub={handleAddDev} />
       </aside>
 
       <main>
