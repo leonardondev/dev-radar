@@ -41,11 +41,12 @@ function Main( {navigation} ) {
          params: {
             latitude,
             longitude,
-            techs: 'ReactJS'
+            techs: 'C'
          }
       });
 
-      setDevs(response.data);
+      console.log(response.data);
+      setDevs(response.data.devs);
    }
 
    function handleRegionChanged(region){
@@ -60,19 +61,27 @@ function Main( {navigation} ) {
    return (
       <>
          <MapView onRegionChangeComplete={handleRegionChanged} initialRegion={currentRegion} style={styles.map}>
-            <Marker coordinate= {{latitude: -21.1461433, longitude: -47.9964195}}>
-               <Image style={styles.avatar} source={{ uri: 'https://avatars0.githubusercontent.com/u/2254731?s=460&v=4' }} />
+            {devs.map(dev => (
+               <Marker
+                  key={dev._id}
+                  coordinate= {{
+                     longitude: dev.location.coordinates[0],
+                     latitude: dev.location.coordinates[1],
+                  }}
+               >
+                  <Image style={styles.avatar} source={{ uri: dev.avatar_url }} />
 
-               <Callout onPress={()=>{
-                  navigation.navigate('Profile',{ github_username:'diego3g' });
-               }} >
-                  <View style={styles.callout}>
-                     <Text style={styles.devName} >Diego Fernandes</Text>
-                     <Text style={styles.devBio} >CTO na Rocketseat. Apaixonado pelas melhores tecnologias de desenvolvimento web e mobile.</Text>
-                     <Text style={styles.devTechs} >ReactJS, React Native, Node.js</Text>
-                  </View>
-               </Callout>
-            </Marker>
+                  <Callout onPress={()=>{
+                     navigation.navigate('Profile',{ github_username:dev.github_username });
+                  }} >
+                     <View style={styles.callout}>
+                        <Text style={styles.devName} >{dev.name}</Text>
+                        <Text style={styles.devBio} >{dev.bio}</Text>
+                        <Text style={styles.devTechs} >{dev.techs.join(', ')}</Text>
+                     </View>
+                  </Callout>
+               </Marker>
+            ))}
          </MapView>
          <View style={styles.serchForm}>
             <TextInput 
@@ -82,7 +91,7 @@ function Main( {navigation} ) {
                autoCapitalize="words"
                autoCorrect={false}
             />
-            <TouchableOpacity onPress={() => {}} style={styles.loadButton}>
+            <TouchableOpacity onPress={loadDevs} style={styles.loadButton}>
                <MaterialIcons name="my-location" size={20} color="#FFF"/>
             </TouchableOpacity>
          </View>
