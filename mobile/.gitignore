@@ -12,6 +12,7 @@ web-report/
 
 # macOS
 .DS_Store
+.env
 
 # misc
 yarn.lock
